@@ -6,10 +6,12 @@ Plot for a ration of the number of galaxies around CIV absorbers to that around 
 
 
 > Random_number_frac_civ_vs_abs_010_* kpc.pdf;
+
 With s16a_wide2 randoms with psf constraints.
 
 
 > Random_number_frac_civ_vs_abs_wo_psf_const_010_* kpc.pdf;
+
 With s16a_wide2 randoms without psf constraints.
 
 
