@@ -1,0 +1,88 @@
+--
+-- put your SQL here
+--
+SELECT photo.ra, photo.dec,
+--- Fix for 2b
+photo.tract, photo.patch_id,
+photo.gcountinputs  as ctg,
+photo.rcountinputs  as ctr,
+photo.icountinputs  as cti,
+photo.zcountinputs  as ctz,
+photo.ycountinputs  as cty
+
+FROM s16a_wide2_random.random as photo
+--- Fix for 2c
+JOIN s16a_wide2.patch_qa as wide USING (patch_id)
+
+WHERE  photo.gflags_pixel_edge is not True
+ AND  photo.rflags_pixel_edge is not True
+ AND  photo.iflags_pixel_edge is not True
+ AND  photo.zflags_pixel_edge is not True
+ AND  photo.yflags_pixel_edge is not True
+
+ AND  photo.gflags_pixel_interpolated_center is not True
+ AND  photo.rflags_pixel_interpolated_center is not True
+ AND  photo.iflags_pixel_interpolated_center is not True
+ AND  photo.zflags_pixel_interpolated_center is not True
+ AND  photo.yflags_pixel_interpolated_center is not True
+
+ AND  photo.gflags_pixel_cr_center is not True
+ AND  photo.rflags_pixel_cr_center is not True
+ AND  photo.iflags_pixel_cr_center is not True
+ AND  photo.zflags_pixel_cr_center is not True
+ AND  photo.yflags_pixel_cr_center is not True
+
+--- Remove the comments on the 3 lines below as fix for 3
+-- AND  photo.rcentroid_sdss_flags is not True
+-- AND  photo.icentroid_sdss_flags is not True
+-- AND  photo.zcentroid_sdss_flags is not True
+
+ AND  photo.gcountinputs > 1
+ AND  photo.rcountinputs > 1
+ AND  photo.icountinputs > 3
+ AND  photo.zcountinputs > 3
+ AND  photo.ycountinputs > 3
+
+--- Fix for Problem 1
+
+ AND photo.gdetect_is_primary is True
+ AND photo.rdetect_is_primary is True
+ AND photo.idetect_is_primary is True
+ AND photo.zdetect_is_primary is True
+ AND photo.ydetect_is_primary is True
+
+--- Fix for Problem 2a
+--- These can be removed since we do not use 
+--- afterburner information of galaxies.
+
+-- AND (1.17218972072-photo.gshape_sdss_psf_xx)*(1.17218972072-photo.gshape_sdss_psf_yy) - photo.gshape_sdss_psf_xy*photo.gshape_sdss_psf_xy > 0
+-- AND (1.17218972072-photo.rshape_sdss_psf_xx)*(1.17218972072-photo.rshape_sdss_psf_yy) - photo.rshape_sdss_psf_xy*photo.rshape_sdss_psf_xy > 0
+-- AND (1.17218972072-photo.ishape_sdss_psf_xx)*(1.17218972072-photo.ishape_sdss_psf_yy) - photo.ishape_sdss_psf_xy*photo.ishape_sdss_psf_xy > 0
+-- AND (1.17218972072-photo.zshape_sdss_psf_xx)*(1.17218972072-photo.zshape_sdss_psf_yy) - photo.zshape_sdss_psf_xy*photo.zshape_sdss_psf_xy > 0
+-- AND (1.17218972072-photo.yshape_sdss_psf_xx)*(1.17218972072-photo.yshape_sdss_psf_yy) - photo.yshape_sdss_psf_xy*photo.yshape_sdss_psf_xy > 0
+
+--- Fix for 2c
+ AND wide.gforced_src_exists IS TRUE   
+ AND wide.rforced_src_exists IS TRUE   
+ AND wide.iforced_src_exists IS TRUE   
+ AND wide.zforced_src_exists IS TRUE   
+ AND wide.yforced_src_exists IS TRUE   
+
+--- Fix for 3
+  AND  photo.gflags_pixel_edge is not True
+  AND  photo.rflags_pixel_edge is not True
+  AND  photo.iflags_pixel_edge is not True
+  AND  photo.zflags_pixel_edge is not True
+  AND  photo.yflags_pixel_edge is not True
+
+  AND  photo.gflags_pixel_interpolated_center is not True
+  AND  photo.rflags_pixel_interpolated_center is not True
+  AND  photo.iflags_pixel_interpolated_center is not True
+  AND  photo.zflags_pixel_interpolated_center is not True
+  AND  photo.yflags_pixel_interpolated_center is not True
+
+  AND  photo.gflags_pixel_cr_center is not True
+  AND  photo.rflags_pixel_cr_center is not True
+  AND  photo.iflags_pixel_cr_center is not True
+  AND  photo.zflags_pixel_cr_center is not True
+  AND  photo.yflags_pixel_cr_center is not True

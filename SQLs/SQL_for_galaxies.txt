@@ -1,0 +1,102 @@
+--
+-- put your SQL here
+--
+SELECT photo.ra, photo.dec,
+       photo.gcmodel_mag - photo.a_g as gmag,
+--       afb.gparent_mag_convolved_2_0 - afb.zparent_mag_convolved_2_0 + photo.zcmodel_mag - photo.a_g as gmag,                 
+--       photo.gcmodel_mag_err as gmag_err,
+       photo.rcmodel_mag - photo.a_r as rmag,
+--       afb.rparent_mag_convolved_2_0 - afb.zparent_mag_convolved_2_0 + photo.zcmodel_mag - photo.a_r as rmag,                 
+--       photo.rcmodel_mag_err as rmag_err,
+       photo.icmodel_mag - photo.a_i as imag,
+--       afb.iparent_mag_convolved_2_0 - afb.zparent_mag_convolved_2_0 + photo.zcmodel_mag - photo.a_i as imag,                 
+       photo.icmodel_mag_err as imag_err,
+       photo.zcmodel_mag - photo.a_z as zmag,
+--       photo.zcmodel_mag_err as zmag_err,
+       photo.ycmodel_mag - photo.a_y as ymag,
+--       afb.yparent_mag_convolved_2_0 - afb.zparent_mag_convolved_2_0 + photo.zcmodel_mag - photo.a_y as ymag,                 
+--       photo.ycmodel_mag_err as ymag_err,
+--       photo.zflags_pixel_bright_object_center as flag_bright,
+       photo.gcountinputs as ctg,
+       photo.rcountinputs as ctr,
+       photo.icountinputs as cti,
+       photo.zcountinputs as ctz,
+       photo.ycountinputs as cty,
+	   
+-- photo-zs                                                                                                                      
+       photoz_mizuki.photoz_median as phz_median_mizuki
+--     photoz_demp.photoz_median as phz_median_demp,
+--     photoz_ephor.photoz_median as phz_median_ephor,
+--     photoz_ephor_ab.photoz_median as phz_median_ephor_ab,
+--     photoz_frankenz.photoz_median as phz_median_frankenz,
+--     photoz_mlz.photoz_median as phz_median_mlz,
+--     photoz_nnpz.photoz_median as phz_median_nnpz,
+--     photoz_mizuki.photoz_conf_median as phz_median_conf,
+--     photoz_mizuki.photoz_err95_min as phz_err95_min,
+--     photoz_mizuki.photoz_err95_max as phz_err95_max,
+--     photoz_mizuki.rest_hsc_g_mag as g_mag_abs,
+--     photoz_mizuki.rest_hsc_r_mag as r_mag_abs,
+--     photoz_mizuki.rest_hsc_i_mag as i_mag_abs,
+--     photoz_mizuki.rest_hsc_y_mag as y_mag_abs,
+--     photoz_mizuki.rest_hsc_z_mag as z_mag_abs,
+--     photoz_mizuki.stellar_mass as Ms,
+--     photoz_mizuki.sfr as sfr
+
+
+FROM s16a_wide2.forced as photo
+     JOIN s16a_wide2.afterburner as afb USING (object_id)
+     JOIN s16a_wide2.photoz_mizuki as photoz_mizuki USING (object_id)
+--	 JOIN s16a_wide2.photoz_demp as photoz_demp USING (object_id)
+--	 JOIN s16a_wide2.photoz_ephor as photoz_ephor USING (object_id)
+--	 JOIN s16a_wide2.photoz_ephor_ab as photoz_ephor_ab USING (object_id)
+--	 JOIN s16a_wide2.photoz_frankenz as photoz_frankenz USING (object_id)
+--	 JOIN s16a_wide2.photoz_mlz as photoz_mlz USING (object_id)
+--	 JOIN s16a_wide2.photoz_nnpz as photoz_nnpz USING (object_id)
+
+WHERE  photo.gflags_pixel_edge is not True
+  AND  photo.rflags_pixel_edge is not True
+  AND  photo.iflags_pixel_edge is not True
+  AND  photo.zflags_pixel_edge is not True
+  AND  photo.yflags_pixel_edge is not True
+
+  AND  photo.gflags_pixel_interpolated_center is not True
+  AND  photo.rflags_pixel_interpolated_center is not True
+  AND  photo.iflags_pixel_interpolated_center is not True
+  AND  photo.zflags_pixel_interpolated_center is not True
+  AND  photo.yflags_pixel_interpolated_center is not True
+
+  AND  photo.gflags_pixel_cr_center is not True
+  AND  photo.rflags_pixel_cr_center is not True
+  AND  photo.iflags_pixel_cr_center is not True
+  AND  photo.zflags_pixel_cr_center is not True
+  AND  photo.yflags_pixel_cr_center is not True
+
+  AND  photo.gcmodel_flux_flags is not True
+  AND  photo.rcmodel_flux_flags is not True
+  AND  photo.icmodel_flux_flags is not True
+  AND  photo.zcmodel_flux_flags is not True
+  AND  photo.ycmodel_flux_flags is not True
+
+  AND  photo.rcentroid_sdss_flags is not True
+  AND  photo.icentroid_sdss_flags is not True
+  AND  photo.zcentroid_sdss_flags is not True
+
+  AND  afb.gparent_flux_convolved_2_0_flags is not True
+  AND  afb.rparent_flux_convolved_2_0_flags is not True
+  AND  afb.iparent_flux_convolved_2_0_flags is not True
+  AND  afb.zparent_flux_convolved_2_0_flags is not True
+  AND  afb.yparent_flux_convolved_2_0_flags is not True
+
+  AND  photo.gcountinputs > 1
+  AND  photo.rcountinputs > 1
+  AND  photo.icountinputs > 3
+  AND  photo.zcountinputs > 3
+  AND  photo.ycountinputs > 3
+
+  AND  photo.detect_is_primary is True
+
+--  AND  (photo.rcmodel_mag - photo.a_r) < 28.0
+  AND  (photo.icmodel_mag - photo.a_i) < 28.0
+--  AND  (photo.zcmodel_mag - photo.a_z) < 24.0
+--  AND  photo.zcmodel_mag_err < 0.1
+  AND  photo.iclassification_extendedness > 0.9
