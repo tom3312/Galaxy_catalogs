@@ -1,6 +1,6 @@
 # Random_vs_galaxies
 
-Mask_check:
+## Mask_check
 
 Plot for a ration of the number of galaxies around CIV absorbers to that around their reference QSOs at inpact parameter, 10 < rp < x kpc (x = 100, 200 and 300, respectively)
 
