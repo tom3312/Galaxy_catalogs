@@ -9,7 +9,6 @@ With s16a_wide2 randoms with psf constraints.
 Random_number_frac_civ_vs_abs_wo_psf_const_010_* kpc.pdf;
 With s16a_wide2 randoms without psf constraints.
 
-
 RA_vs_DEC:
 random_vs_gal_171116_v2.pdf;
 s16a_wide2 randoms v.s. s16a_wide2 galaxies.
